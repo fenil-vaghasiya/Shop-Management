@@ -19,6 +19,8 @@ type BillItem = {
   sellingPrice: number;
 };
 
+const CGST_PERCENT = 9;
+const SGST_PERCENT = 9;
 
 export default function Billing() {
   const [customers, setCustomers] = useState<any[]>([]);
@@ -28,22 +30,23 @@ export default function Billing() {
   const [qty, setQty] = useState("");
   const [price, setPrice] = useState("");
   const [paymentStatus, setPaymentStatus] = useState<"PAID" | "PENDING">(
-    "PAID"
+    "PAID",
   );
   const [items, setItems] = useState<BillItem[]>([]);
+  const [gstEnabled, setGstEnabled] = useState(true);
 
   useEffect(() => {
     const load = async () => {
       setCustomers(
         navigator.onLine
           ? await getCustomers().catch(getOfflineCustomers)
-          : await getOfflineCustomers()
+          : await getOfflineCustomers(),
       );
 
       setProducts(
         navigator.onLine
           ? await getProducts().catch(getOfflineProducts)
-          : await getOfflineProducts()
+          : await getOfflineProducts(),
       );
     };
 
@@ -92,7 +95,7 @@ export default function Billing() {
 
       totalCost += consumed.reduce(
         (sum, c) => sum + c.usedQty * c.purchasePrice,
-        0
+        0,
       );
 
       await reduceOfflineStock(consumed);
@@ -100,8 +103,12 @@ export default function Billing() {
 
     const subTotal = items.reduce(
       (sum, i) => sum + i.quantity * i.sellingPrice,
-      0
+      0,
     );
+
+    const cgst = gstEnabled ? (subTotal * CGST_PERCENT) / 100 : 0;
+    const sgst = gstEnabled ? (subTotal * SGST_PERCENT) / 100 : 0;
+    const totalAmount = subTotal + cgst + sgst;
 
     const profit = subTotal - totalCost;
 
@@ -110,10 +117,11 @@ export default function Billing() {
       paymentMode: "CASH" as const,
       paymentStatus,
       items,
-      totalAmount: subTotal,
-      paidAmount: paymentStatus === "PAID" ? subTotal : 0,
+      totalAmount,
+      paidAmount: paymentStatus === "PAID" ? totalAmount : 0,
       profit,
       createdAt: new Date().toISOString(),
+      gstEnabled,
     };
 
     try {
@@ -174,6 +182,31 @@ export default function Billing() {
           value={price}
           onChange={(e) => setPrice(e.target.value)}
         />
+
+        {/* GST TOGGLE */}
+        <div className="flex items-center justify-between">
+          <span className="text-sm font-medium text-slate-700">
+            Apply GST (18%)
+          </span>
+
+          <button
+            type="button"
+            onClick={() => setGstEnabled((prev) => !prev)}
+            className={`
+      relative inline-flex h-6 w-11 items-center rounded-full
+      transition-colors duration-200 cursor-pointer
+      ${gstEnabled ? "bg-blue-600" : "bg-slate-300"}
+    `}
+          >
+            <span
+              className={`
+        inline-block h-5 w-5 transform rounded-full bg-white
+        transition-transform duration-200 cursor-pointer
+        ${gstEnabled ? "translate-x-5" : "translate-x-1"}
+      `}
+            />
+          </button>
+        </div>
 
         {/* PAYMENT STATUS */}
         <Select

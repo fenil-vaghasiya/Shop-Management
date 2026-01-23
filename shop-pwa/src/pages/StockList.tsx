@@ -66,7 +66,9 @@ export default function StockList() {
       )}
 
       <div className="space-y-3">
-        {data.map((item) => (
+        {data
+          .sort((a, b) => (a.batches[0].purchaseDate! > b.batches[0].purchaseDate! ? -1 : 1 ))
+          .map((item) => (
           <div
             key={item.product.id}
             className="bg-white border border-slate-200 rounded-xl p-4 shadow-sm space-y-2"

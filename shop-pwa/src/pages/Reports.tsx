@@ -1,11 +1,9 @@
 import { useEffect, useState } from "react";
 import { getOfflineBills } from "../offline/bill.read";
 
-const GST_PERCENT = 18;
-
 type ReportItem = {
   count: number;
-  sales: number;  // GST INCLUDED
+  sales: number;
   profit: number;
 };
 
@@ -27,9 +25,7 @@ export default function Reports() {
           year: "numeric"
         });
 
-        // 🔥 GST CALCULATION
-        const gst = +(b.totalAmount * GST_PERCENT / 100);
-        const grossSale = b.totalAmount + gst;
+        const grossSale = b.totalAmount;
 
         // DAILY
         if (!dailyMap[dateKey]) {
@@ -58,7 +54,7 @@ export default function Reports() {
   return (
     <div className="p-4 space-y-6 bg-slate-50 min-h-screen">
       <h1 className="text-xl font-semibold text-slate-900">
-        Reports (incl. 18% GST)
+        Reports
       </h1>
 
       {/* DAILY REPORT */}
@@ -93,7 +89,7 @@ export default function Reports() {
                 <div className="grid grid-cols-3 gap-3 text-center">
                   <Metric label="Bills" value={r.count} />
                   <Metric
-                    label="Sales (GST)"
+                    label="Sales"
                     value={`₹${r.sales.toFixed(2)}`}
                   />
                   <Metric
@@ -139,7 +135,7 @@ export default function Reports() {
                 <div className="grid grid-cols-3 gap-3 text-center">
                   <Metric label="Bills" value={r.count} />
                   <Metric
-                    label="Sales (GST)"
+                    label="Sales"
                     value={`₹${r.sales.toFixed(2)}`}
                   />
                   <Metric

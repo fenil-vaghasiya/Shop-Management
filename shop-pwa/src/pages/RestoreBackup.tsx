@@ -1,7 +1,10 @@
+import { useRef } from "react";
 import { toast } from "react-toastify";
 import { importBackup } from "../offline/backup.import";
 
 export default function RestoreBackup() {
+  const fileRef = useRef<HTMLInputElement>(null);
+
   const handleRestore = async (
     e: React.ChangeEvent<HTMLInputElement>
   ) => {
@@ -27,11 +30,35 @@ export default function RestoreBackup() {
         Restore Backup
       </h1>
 
+      {/* CLICKABLE RESTORE AREA */}
+      <div
+        onClick={() => fileRef.current?.click()}
+        className="
+          cursor-pointer
+          border-2 border-dashed border-slate-300
+          rounded-xl
+          p-6
+          bg-white
+          text-center
+          hover:border-blue-600
+          transition
+        "
+      >
+        <div className="text-lg font-medium text-slate-800">
+          📂 Click to select backup file
+        </div>
+        <div className="text-sm text-slate-500 mt-1">
+          JSON backup file only
+        </div>
+      </div>
+
+      {/* HIDDEN FILE INPUT */}
       <input
+        ref={fileRef}
         type="file"
         accept="application/json"
         onChange={handleRestore}
-        className="block"
+        className="hidden"
       />
 
       <p className="text-sm text-slate-500">

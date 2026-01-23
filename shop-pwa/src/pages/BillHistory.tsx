@@ -32,7 +32,9 @@ export default function BillHistory() {
       )}
 
       <div className="space-y-3">
-        {bills.map(b => {
+        {bills
+          .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+          .map(b => {
           const isLoss = b.profit < 0;
 
           return (

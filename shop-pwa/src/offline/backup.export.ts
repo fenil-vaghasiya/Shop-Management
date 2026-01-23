@@ -12,11 +12,11 @@ export async function exportBackup() {
     },
     data: {
       customers: await db.getAll("customers"),
-      product_types: await db.getAll("productTypes"),
+      productTypes: await db.getAll("productTypes"),
       products: await db.getAll("products"),
       stocks: await db.getAll("stocks"),
       bills: await db.getAll("bills"),
-      bill_items: await db.getAll("syncQueue")
+      syncQueue: await db.getAll("syncQueue")
     }
   };
 

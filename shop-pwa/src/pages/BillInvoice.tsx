@@ -42,8 +42,10 @@ export default function BillInvoice() {
     0
   );
 
-  const cgst = +(subTotal * CGST_PERCENT / 100).toFixed(2);
-  const sgst = +(subTotal * SGST_PERCENT / 100).toFixed(2);
+  const gstEnabled = bill.gstEnabled ?? false;
+
+  const cgst = gstEnabled ? +(subTotal * CGST_PERCENT / 100).toFixed(2) : 0;
+  const sgst = gstEnabled ? +(subTotal * SGST_PERCENT / 100).toFixed(2) : 0;
 
   const grossTotal = subTotal + cgst + sgst;
   const roundedTotal = Math.round(grossTotal);
@@ -109,8 +111,14 @@ export default function BillInvoice() {
       {/* SUMMARY */}
       <div className="border-t border-slate-200 pt-3 space-y-1 text-sm">
         <SummaryRow label="Sub Total" value={subTotal} />
-        <SummaryRow label={`CGST (${CGST_PERCENT}%)`} value={cgst} />
-        <SummaryRow label={`SGST (${SGST_PERCENT}%)`} value={sgst} />
+        {
+          gstEnabled && (
+            <>
+                <SummaryRow label={`CGST (${CGST_PERCENT}%)`} value={cgst} />
+                <SummaryRow label={`SGST (${SGST_PERCENT}%)`} value={sgst} />
+            </>
+          )
+        }
         <SummaryRow label="Round Off" value={roundOff} />
         <SummaryRow
           label="Grand Total"

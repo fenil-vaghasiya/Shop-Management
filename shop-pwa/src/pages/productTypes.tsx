@@ -113,7 +113,9 @@ export default function ProductTypes() {
         )}
 
         <ul className="divide-y divide-slate-200">
-          {types.map(t => (
+          {types
+            .sort((a, b) => (a.id! > b.id! ? -1 : 1))
+            .map(t => (
             <li
               key={t.id}
               className="p-4 text-slate-900 font-medium"

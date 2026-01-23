@@ -165,7 +165,9 @@ export default function Products() {
         )}
 
         <ul className="divide-y divide-slate-200">
-          {products.map(p => (
+          {products
+            .sort((a,b)=>(a.id! > b.id! ? -1 : 1))
+            .map(p => (
             <li
               key={p.id}
               className="p-4 flex justify-between items-center"

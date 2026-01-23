@@ -22,7 +22,9 @@ export default function CustomerList({
   return (
     <div className="bg-white rounded-xl shadow-sm">
       <ul className="divide-y divide-slate-200">
-        {customers.map((c) => (
+        {customers
+          .sort((a,b)=>(a.id! > b.id! ? -1 : 1))
+          .map((c) => (
           <CustomerItem
             key={c.id}
             customer={c}

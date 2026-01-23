@@ -6,8 +6,6 @@ import Button from "../components/ui/Button";
 import SearchInput from "../components/ui/SearchInput";
 import { toast } from "react-toastify/unstyled";
 
-const GST_PERCENT = 18;
-
 type PendingBill = {
   id: number;
   customerId: number;
@@ -43,9 +41,7 @@ export default function PendingPayments() {
       .map(b => {
         const customer = customers.find(c => c.id === b.customerId);
 
-        // 🔥 GST CALCULATION (SIMPLE & CORRECT)
-        const gstAmount = +(b.totalAmount * GST_PERCENT / 100).toFixed(2);
-        const grossTotal = b.totalAmount + gstAmount;
+        const grossTotal = b.totalAmount;
 
         return {
           ...b,

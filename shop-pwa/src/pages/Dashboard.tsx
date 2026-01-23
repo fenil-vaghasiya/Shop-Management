@@ -32,7 +32,7 @@ export default function Dashboard() {
         <DashboardCard to="/stock-list" label="Stock Summary" />
         <DashboardCard to="/bills" label="Bill History" />
         <DashboardCard to="/reports" label="Reports" />
-        <DashboardCard to="/settings" label="⚙ Settings" />
+        <DashboardCard to="/settings" label="Settings" />
       </div>
 
       {/* CRITICAL SECTION */}
